@@ -1967,16 +1967,44 @@ function setupPWA() {
   const canvas = document.createElement('canvas');
   canvas.width = 512; canvas.height = 512;
   const ctx = canvas.getContext('2d');
-  ctx.fillStyle = '#0a0a0a'; ctx.fillRect(0,0,512,512);
-  ctx.fillStyle = '#c8f135';
-  ctx.font = 'bold 180px sans-serif';
-  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-  ctx.fillText('TL', 256, 256);
+
+  // Background — creme
+  ctx.fillStyle = '#F5F0E8';
+  ctx.fillRect(0, 0, 512, 512);
+
+  // Draw minimalist dumbbell in terracota
+  ctx.fillStyle = '#C4622D';
+  ctx.strokeStyle = '#C4622D';
+  ctx.lineCap = 'round';
+
+  const cx = 256, cy = 256;
+  const barW = 160, barH = 28;
+  const plateW = 44, plateH = 110, plateR = 10;
+
+  // Center bar
+  ctx.beginPath();
+  ctx.roundRect(cx - barW/2, cy - barH/2, barW, barH, barH/2);
+  ctx.fill();
+
+  // Left plates
+  function drawPlate(x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.roundRect(x, y, w, h, r);
+    ctx.fill();
+  }
+
+  drawPlate(cx - barW/2 - plateW + 4, cy - plateH/2, plateW, plateH, plateR);
+  drawPlate(cx - barW/2 - plateW - 18, cy - plateH*0.7/2, plateW - 8, plateH*0.7, plateR);
+
+  // Right plates
+  drawPlate(cx + barW/2 - 4, cy - plateH/2, plateW, plateH, plateR);
+  drawPlate(cx + barW/2 + 18, cy - plateH*0.7/2, plateW - 8, plateH*0.7, plateR);
+
   const icon = canvas.toDataURL('image/png');
   const iconLink = document.getElementById('pwa-icon');
   if (iconLink) iconLink.href = icon;
 
-  const manifest = { name:'TreinoLog', short_name:'TreinoLog', display:'standalone', background_color:'#0a0a0a', theme_color:'#0a0a0a', orientation:'portrait', icons:[{src:icon,sizes:'512x512',type:'image/png'}] };
+  const manifest = { name:'TreinoLog', short_name:'TreinoLog', display:'standalone', background_color:'#F5F0E8', theme_color:'#F5F0E8', orientation:'portrait', icons:[{src:icon,sizes:'512x512',type:'image/png'}] };
   const mBlob = new Blob([JSON.stringify(manifest)], {type:'application/json'});
   const mLink = document.getElementById('pwa-manifest');
   if (mLink) mLink.href = URL.createObjectURL(mBlob);
